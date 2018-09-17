@@ -1,0 +1,63 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+<context:component-scan base-package="com.Oddle.WeatherSearch.Controllers" />
+
+
+<!-- View Resolver Configuration -->
+
+    <bean id="viewResolver"
+    	class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="prefix">
+            <value>/WEB-INF/JSP/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+
+
+<!-- Resource Configuration --> 
+<mvc:resources mapping="/resources/**" location="/resources/" />
+<mvc:annotation-driven />
+    
+<!-- Bean Configuration -->
+<bean id="weatherSearchPageService" class="com.Oddle.WeatherSearch.ServiceImpl.WeatherSearchPageServiceImpl"/>
+<bean id="weatherSearchPageDAO" class="com.Oddle.WeatherSearch.DAOImpl.WeatherSearchPageDAOImpl"/>
+
+
+
+<!-- Hibernate Configuration -->
+<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+<property name="dataSource" ref="dataSource" />
+<property name="packagesToScan" value="com.Oddle.WeatherSearch.VO"/>
+<property name="hibernateProperties">
+	<props>
+		<prop key="dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
+		<prop key="hibernate.hbm2ddl.auto">update</prop>
+		<prop key="hibernate.show_sql">true</prop>
+		<prop key="hibernate.format_sql">true</prop>
+	</props>
+</property>
+
+</bean>
+
+
+<bean id="dataSource"
+class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+<property name="url" value="jdbc:mysql://localhost:3306/WeatherData" />
+<property name="username" value="root" />
+<property name="password" value="root" />
+</bean>
+
+</beans>
